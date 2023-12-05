@@ -14,6 +14,8 @@ const ProductCard = ({ id, img, name, code, price }) => {
     return () => clearInterval(interval);
   }, [currentSlideIndex, img.length]);
 
+  
+
   return (
     <div key={id} className="w-[200px] h-[335px] rounded-2xl shadow-lg">
       <div className="w-[200px] h-[335px] rounded-2xl shadow-lg">
