@@ -41,7 +41,7 @@ const Produstlist = () => {
     <LayoutComponent>
       <div className="flex flex-col justify-center items-center gap-8">
         <div className="w-full">
-          <FontComponent fontType={'pagetitle'}>Product List</FontComponent>
+          <FontComponent $fontType={'pagetitle'}>Product List</FontComponent>
         </div>
         <div className="relative w-full">
           <InputComponent

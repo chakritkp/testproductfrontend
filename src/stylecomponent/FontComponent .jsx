@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+
 const fontTypeMap = {
   default: {
     fontSize: '16px',
