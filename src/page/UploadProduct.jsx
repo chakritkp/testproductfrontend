@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {
-  resetProductData,
-  addProduct,
-} from "../store/slices/productSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 const cloudinaryName = import.meta.env.VITE_CLOUDINARY_NAME;
 const cloudinaryPreset = import.meta.env.VITE_CLOUDINARY_PRESET;
-import axios from "axios";
+
+import { resetProductData, addProduct } from "../store/slices/productSlice";
+
 import { PiUploadSimpleThin } from "react-icons/pi";
 import { MdDeleteForever } from "react-icons/md";
 import { CiSquarePlus } from "react-icons/ci";
+import { MdNavigateBefore } from "react-icons/md";
 import LayoutComponent from "../stylecomponent/LayoutComponent";
 import FontComponent from "../stylecomponent/FontComponent ";
 import InputComponent from "../stylecomponent/InputComponent";
@@ -20,6 +22,7 @@ const UploadProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [disabledButton, setDisabledButton] = useState(false);
   const [imagePreview, setImagePreview] = useState([]);
   const [fileName, setFileName] = useState([]);
   const [formData, setFormData] = useState({
@@ -69,9 +72,22 @@ const UploadProduct = () => {
 
   const handleInputSumit = async (e) => {
     e.preventDefault();
-
-    if (formData.img.length === 0) {
-      console.error("No files selected");
+    if (
+      formData.img.length === 0 ||
+      formData.name === "" ||
+      formData.code === "" ||
+      formData.price === 0
+    ) {
+      toast.error('All fields are required', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return;
     }
 
@@ -92,15 +108,25 @@ const UploadProduct = () => {
       const uploadedFiles = await Promise.all(uploadPromises);
 
       const newProdute = {
-        img: uploadedFiles,
+        img: uploadedFiles.reverse(),
         name: formData.name,
         code: formData.code,
         price: formData.price,
       };
-
+      setDisabledButton(true);
       dispatch(addProduct(newProdute));
       dispatch(resetProductData());
-      navigate("/")
+      toast.success("Add Product Success!", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      navigate("/");
     } catch (error) {
       console.error("Error uploading files:", error);
     }
@@ -108,20 +134,26 @@ const UploadProduct = () => {
 
   return (
     <LayoutComponent>
+      <Link to='/'>
+        <div className="w-full flex justify-start items-center">
+          <MdNavigateBefore size={"48px"} />
+          <FontComponent fontType={"title"} fontSize={"24px"}>
+            Productlist
+          </FontComponent>
+        </div>
+      </Link>
       <form
         className="flex flex-col gap-10 justify-center items-center"
         onSubmit={handleInputSumit}
         method="post"
       >
         <div className="w-full">
-          <FontComponent fontType={'pagetitle'}>Upload Product</FontComponent>
+          <FontComponent fontType={"pagetitle"}>Upload Product</FontComponent>
         </div>
 
         <div className="flex flex-col gap-2 w-[924px] ">
           <div className="flex flex-col gap-2 w-full">
-            <FontComponent fontType={'title'}>
-              Upload Image
-            </FontComponent>
+            <FontComponent fontType={"title"}>Upload Image</FontComponent>
             <div
               className="flex flex-col gap-3 justify-center items-center w-full h-[350px] rounded-xl cursor-pointer border-dashed border-[1px] border-[#D9D9D9]"
               onClick={() => document.querySelector("#inputImg-field").click()}
@@ -132,6 +164,7 @@ const UploadProduct = () => {
                 accept="image/*"
                 id="inputImg-field"
                 hidden
+                required
                 onChange={({ target: { files } }) => {
                   if (files) {
                     const newFiles = Array.from(files);
@@ -177,19 +210,23 @@ const UploadProduct = () => {
               ) : (
                 <div className="flex flex-col justify-center items-center">
                   <PiUploadSimpleThin size={"26px"} />
-                  <FontComponent color={'#6C6C70'}>
+                  <FontComponent color={"#6C6C70"}>
                     Drag & Drop of{" "}
                     <a className="underline text-blue-600">Choose file</a> to
                     upload
                   </FontComponent>
-                  <FontComponent fontSize={'12px'} color={'#6C6C70'}>
+                  <FontComponent fontSize={"12px"} color={"#6C6C70"}>
                     JPG or PNG Maximum file size 50MB.
                   </FontComponent>
                 </div>
               )}
             </div>
             <div className="flex flex-col gap-2 w-full">
-              <FontComponent fontSize={'12px'} color={'#6C6C70'} textAlign={'end'}>
+              <FontComponent
+                fontSize={"12px"}
+                color={"#6C6C70"}
+                textAlign={"end"}
+              >
                 image upload ({fileName.length}/6)
               </FontComponent>
               {fileName.map((fileImg, index) => (
@@ -208,57 +245,72 @@ const UploadProduct = () => {
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <FontComponent fontType={'title'}>
-                Product name
-              </FontComponent>
+              <FontComponent fontType={"title"}>Product name</FontComponent>
               <InputComponent
                 className="w-full text-base font-light h-[56px] placeholder-gray-200 rounded-3xl px-6 border-solid border-[1px] border-[#D9D9D9]"
                 type="text"
                 name="name"
                 placeholder="Product name"
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="flex flex-col gap-2">
-              <FontComponent fontType={'title'}>Code</FontComponent>
+              <FontComponent fontType={"title"}>Code</FontComponent>
               <InputComponent
                 className="w-full text-base font-light h-[56px] placeholder-gray-200 rounded-3xl px-6 border-solid border-[1px] border-[#D9D9D9]"
                 type="text"
                 name="code"
                 placeholder="Code"
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="flex flex-col gap-2">
-              <FontComponent fontType={'title'}>Price</FontComponent>
+              <FontComponent fontType={"title"}>Price</FontComponent>
               <InputComponent
                 className="w-full text-base font-light h-[56px] placeholder-gray-200 rounded-3xl px-6 border-solid border-[1px] border-[#D9D9D9]"
                 type="number"
                 name="price"
                 placeholder="฿1,000"
                 onChange={handleInputChange}
+                required
               />
             </div>
           </div>
         </div>
         <div className="flex gap-6">
           <ButtonComponent
-            color={'#E13B30'}
-            bg={'#FFFFFF'}
-            border={'1px solid #D9D9D9'}
+            color={"#E13B30"}
+            bg={"#FFFFFF"}
+            border={"1px solid #D9D9D9"}
             type="reset"
+            disabled={disabledButton}
           >
             ยกเลิก
           </ButtonComponent>
           <ButtonComponent
-            color={'#FFFFFF'}
-            bg={'#E13B30'}
+            color={"#FFFFFF"}
+            bg={"#E13B30"}
             type="submit"
+            disabled={disabledButton}
           >
             ยืนยัน
           </ButtonComponent>
         </div>
       </form>
+      <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </LayoutComponent>
   );
 };

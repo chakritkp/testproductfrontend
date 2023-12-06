@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-
 const fontTypeMap = {
   default: {
     fontSize: '16px',
@@ -29,13 +28,12 @@ const fontTypeMap = {
   },
 }
 
-
 const StyledFontComponent = styled.div`
   font-family: "Poppins", sans-serif;
-  font-size: ${(props) => props.fontSize || fontTypeMap[props.fontType]?.fontSize || fontTypeMap.default.fontSize};
-  color: ${(props) => props.color || fontTypeMap[props.fontType]?.color || fontTypeMap.default.color};
-  font-weight: ${(props) => props.fontWeight || fontTypeMap[props.fontType]?.fontWeight || fontTypeMap.default.fontWeight};
-  text-align: ${(props) => props.textAlign || fontTypeMap[props.fontType]?.textAlign || fontTypeMap.default.textAlign};
+  font-size: ${props => props.fontSize || fontTypeMap[props.fontType]?.fontSize || fontTypeMap.default.fontSize};
+  color: ${props => props.color || fontTypeMap[props.fontType]?.color || fontTypeMap.default.color};
+  font-weight: ${props => props.fontWeight || fontTypeMap[props.fontType]?.fontWeight || fontTypeMap.default.fontWeight};
+  text-align: ${props => props.textAlign || fontTypeMap[props.fontType]?.textAlign || fontTypeMap.default.textAlign};
 `;
 
 const FontComponent = ({
