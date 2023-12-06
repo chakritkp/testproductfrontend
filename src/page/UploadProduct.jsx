@@ -135,7 +135,7 @@ const UploadProduct = () => {
   return (
     <LayoutComponent>
       <Link to="/">
-        <div className="w-full flex justify-start items-center">
+        <div className="w-full fixed top-0 left-0 h-[80px] flex justify-start items-center pb-3 bg-white">
           <MdNavigateBefore size={"48px"} />
           <FontComponent fontType={"title"} fontSize={"24px"}>
             Productlist
