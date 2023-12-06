@@ -61,10 +61,6 @@ const UploadProduct = () => {
     setImagePreview(updetedImagePreview);
   };
 
-  console.log("formData : " + formData.img);
-  console.log("fileName : " + fileName);
-  console.log("imagePreview : " + imagePreview);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
