@@ -11,6 +11,10 @@ import axios from "axios";
 import { PiUploadSimpleThin } from "react-icons/pi";
 import { MdDeleteForever } from "react-icons/md";
 import { CiSquarePlus } from "react-icons/ci";
+import LayoutComponent from "../stylecomponent/LayoutComponent";
+import FontComponent from "../stylecomponent/FontComponent ";
+import InputComponent from "../stylecomponent/InputComponent";
+import ButtonComponent from "../stylecomponent/ButtonComponent";
 
 const UploadProduct = () => {
   const dispatch = useDispatch();
@@ -102,27 +106,23 @@ const UploadProduct = () => {
     }
   };
 
-  // console.log(formData);
-
   return (
-    <section className="flex flex-col items-center top-24 p-16 gap-10 h-screen">
+    <LayoutComponent>
       <form
-        className="flex flex-col gap-10 justify-center items-center w-[1240px]"
-        action=""
+        className="flex flex-col gap-10 justify-center items-center"
         onSubmit={handleInputSumit}
         method="post"
       >
         <div className="w-full">
-          <h1 className="text-3xl font-bold text-[#252525]">Upload Product</h1>
+          <FontComponent fontType={'pagetitle'}>Upload Product</FontComponent>
         </div>
 
         <div className="flex flex-col gap-2 w-[924px] ">
           <div className="flex flex-col gap-2 w-full">
-            <h3 className="text-base font-medium text-[#252525]">
+            <FontComponent fontType={'title'}>
               Upload Image
-            </h3>
+            </FontComponent>
             <div
-              action=""
               className="flex flex-col gap-3 justify-center items-center w-full h-[350px] rounded-xl cursor-pointer border-dashed border-[1px] border-[#D9D9D9]"
               onClick={() => document.querySelector("#inputImg-field").click()}
             >
@@ -177,21 +177,21 @@ const UploadProduct = () => {
               ) : (
                 <div className="flex flex-col justify-center items-center">
                   <PiUploadSimpleThin size={"26px"} />
-                  <p className="text-base font-normal text-gray-500">
+                  <FontComponent color={'#6C6C70'}>
                     Drag & Drop of{" "}
                     <a className="underline text-blue-600">Choose file</a> to
                     upload
-                  </p>
-                  <p className="text-base font-light text-gray-500">
+                  </FontComponent>
+                  <FontComponent fontSize={'12px'} color={'#6C6C70'}>
                     JPG or PNG Maximum file size 50MB.
-                  </p>
+                  </FontComponent>
                 </div>
               )}
             </div>
-            <div className="flex flex-col gap-2 items-end w-full">
-              <p className="text-sm font-light text-gray-400">
+            <div className="flex flex-col gap-2 w-full">
+              <FontComponent fontSize={'12px'} color={'#6C6C70'} textAlign={'end'}>
                 image upload ({fileName.length}/6)
-              </p>
+              </FontComponent>
               {fileName.map((fileImg, index) => (
                 <div
                   key={index}
@@ -208,10 +208,10 @@ const UploadProduct = () => {
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <h3 className="text-base font-medium text-[#252525]">
+              <FontComponent fontType={'title'}>
                 Product name
-              </h3>
-              <input
+              </FontComponent>
+              <InputComponent
                 className="w-full text-base font-light h-[56px] placeholder-gray-200 rounded-3xl px-6 border-solid border-[1px] border-[#D9D9D9]"
                 type="text"
                 name="name"
@@ -220,8 +220,8 @@ const UploadProduct = () => {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <h3 className="text-base font-medium text-[#252525]">Code</h3>
-              <input
+              <FontComponent fontType={'title'}>Code</FontComponent>
+              <InputComponent
                 className="w-full text-base font-light h-[56px] placeholder-gray-200 rounded-3xl px-6 border-solid border-[1px] border-[#D9D9D9]"
                 type="text"
                 name="code"
@@ -230,8 +230,8 @@ const UploadProduct = () => {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <h3 className="text-base font-medium text-[#252525]">Price</h3>
-              <input
+              <FontComponent fontType={'title'}>Price</FontComponent>
+              <InputComponent
                 className="w-full text-base font-light h-[56px] placeholder-gray-200 rounded-3xl px-6 border-solid border-[1px] border-[#D9D9D9]"
                 type="number"
                 name="price"
@@ -242,21 +242,24 @@ const UploadProduct = () => {
           </div>
         </div>
         <div className="flex gap-6">
-          <button
-            className="w-[190px] h-[56px] text-base font-normal text-[#E13B30] rounded-3xl border-solid border-2 border-gray-200"
+          <ButtonComponent
+            color={'#E13B30'}
+            bg={'#FFFFFF'}
+            border={'1px solid #D9D9D9'}
             type="reset"
           >
             ยกเลิก
-          </button>
-          <button
-            className="w-[190px] h-[56px] text-base font-normal text-white bg-[#E13B30]  rounded-3xl "
+          </ButtonComponent>
+          <ButtonComponent
+            color={'#FFFFFF'}
+            bg={'#E13B30'}
             type="submit"
           >
             ยืนยัน
-          </button>
+          </ButtonComponent>
         </div>
       </form>
-    </section>
+    </LayoutComponent>
   );
 };
 

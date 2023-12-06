@@ -6,6 +6,9 @@ import {
 } from "../store/slices/productSlice";
 import { FaSearch } from "react-icons/fa";
 import ProductCard from "../component/ProductCard";
+import FontComponent from "../stylecomponent/FontComponent ";
+import LayoutComponent from "../stylecomponent/LayoutComponent";
+import InputComponent from "../stylecomponent/InputComponent";
 
 const Produstlist = () => {
   const product = useSelector(selectProductData);
@@ -35,20 +38,21 @@ const Produstlist = () => {
   }, [searchTerm, product]);
 
   return (
-    <main className="flex flex-col items-center top-24 p-16 gap-10 h-screen">
-      <div className="flex flex-col justify-center items-center gap-8 min-w-[1240px]">
+    <LayoutComponent>
+      <div className="flex flex-col justify-center items-center gap-8">
         <div className="w-full">
-          <h1 className="text-3xl font-bold text-[#252525]">Product List</h1>
+          <FontComponent fontType={'pagetitle'}>Product List</FontComponent>
         </div>
         <div className="relative w-full">
-          <input
-            className="w-full h-[56px] p-6 pl-12 text-[#252525] placeholder:text-[#BCBCC0] text-base font-normal placeholder-gray-200 rounded-3xl border-solid border-2 border-gray-200"
+          <InputComponent
+            style={{paddingLeft: `48px`}}
+            className="pl-12"
             type="text"
             placeholder="Name, Catalogue, Code"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <div className="absolute inset-y-0 left-2 flex items-center pl-3">
-            <FaSearch className="text-[#BCBCC0]" />
+            <FaSearch className="text-[#D9D9D9]" />
           </div>
         </div>
         <div className="flex flex-wrap gap-6 w-[1100px]">
@@ -64,12 +68,12 @@ const Produstlist = () => {
             />)
           ) : (
             <div className="w-full flex justify-center items-center">
-              <p className="font-medium text-xl text-[#252525]">No products found.</p>
+              <FontComponent fontType={'default'}>No products found.</FontComponent>
             </div>
           )}
         </div>
       </div>
-    </main>
+    </LayoutComponent>
   );
 };
 

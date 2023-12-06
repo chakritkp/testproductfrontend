@@ -1,4 +1,49 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import FontComponent from "../stylecomponent/FontComponent ";
+
+const CardContainer = styled.div`
+  width: 200px;
+  height: 335px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px 0px rgb(0 0 0 / 0.1);
+`;
+const ImageContainer = styled.div`
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  width: 200px;
+  height: 200px;
+`;
+
+const ImageSlider = styled.div`
+  min-width: 100%;
+  min-height: 100%;
+  background-size: cover;
+  transition: 500ms;
+`;
+const CurrentIndexContainer = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+`;
+
+const CurrentIndex = styled.div`
+  width: 16px;
+  height: 2px;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px;
+`;
+
 
 const ProductCard = ({ id, img, name, code, price }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -14,49 +59,41 @@ const ProductCard = ({ id, img, name, code, price }) => {
     return () => clearInterval(interval);
   }, [currentSlideIndex, img.length]);
 
-  
-
   return (
-    <div key={id} className="w-[200px] h-[335px] rounded-2xl shadow-lg">
-      <div className="w-[200px] h-[335px] rounded-2xl shadow-lg">
-        <div className="flex overflow-hidden rounded-t-xl relative">
+    <CardContainer key={id}>
+      <ImageContainer>
+        {img.map((img, index) => (
+          <ImageSlider
+            key={index}
+            style={{
+              backgroundImage: `url(${img})`,
+              transform: `translate(-${currentSlideIndex * 2}00px, 0)`,
+            }}
+          />
+        ))}
+        <CurrentIndexContainer>
           {img.map((img, index) => (
-            <div
+            <CurrentIndex
               key={index}
               style={{
-                backgroundImage: `url(${img})`,
+                backgroundColor:
+                  index === currentSlideIndex % img.length
+                    ? "#E13B30"
+                    : "#D9D9D9",
               }}
-              className={`min-w-[200px] z-10 min-h-[200px] -translate-x-[${
-                currentSlideIndex * 200
-              }px] bg-cover duration-500 bg-slate-500 overflow-hidden transform scale-100`}
             />
           ))}
+        </CurrentIndexContainer>
+      </ImageContainer>
 
-          <div className="flex gap-1 w-[200px] justify-center absolute z-50 bottom-3">
-            {img.map((img, index) => (
-              <div
-                key={index}
-                className={`w-4 h-[2px] ${
-                  index === currentSlideIndex % img.length
-                    ? "bg-[#E13B30]"
-                    : "bg-[#D9D9D9]"
-                }`}
-              />
-            ))}
-          </div>
+      <TextContainer>
+        <div>
+          <FontComponent fontType={'title'}>{name}</FontComponent>
+          <FontComponent fontType={'subtitle'}>{code}</FontComponent>
         </div>
-
-        <div className="flex flex-col gap-6 p-4">
-          <div>
-            <h3 className="text-[#252525] text-base font-semibold">{name}</h3>
-            <p className="text-[#252525] text-xs font-light">{code}</p>
-          </div>
-          <div className="flex justify-end">
-            <h2 className="text-xl font-semibold text-[#E13B30]">฿{price}</h2>
-          </div>
-        </div>
-      </div>
-    </div>
+          <FontComponent fontType={'price'} textAlign={'end'}>฿{price}</FontComponent>
+      </TextContainer>
+    </CardContainer>
   );
 };
 
