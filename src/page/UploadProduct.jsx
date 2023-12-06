@@ -211,6 +211,18 @@ const UploadProduct = () => {
     }
   };
 
+  const handleResetInput = () => {
+    setFormData({
+      img: [],
+      name: "",
+      code: "",
+      price: 0,
+    });
+  
+    setFileName([]);
+    setImagePreview([]);
+  }
+
   return (
     <LayoutComponent>
       <Link to="/">
@@ -341,6 +353,7 @@ const UploadProduct = () => {
             bg={"#FFFFFF"}
             border={"1px solid #D9D9D9"}
             type="reset"
+            onClick={handleResetInput}
             disabled={disabledButton}
           >
             ยกเลิก
