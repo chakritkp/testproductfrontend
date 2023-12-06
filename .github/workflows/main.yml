@@ -24,7 +24,8 @@ jobs:
       - name: Build the Vite app
         env:
           VITE_API_URL: ${{ secrets.API_URL }}
-
+          VITE_CLOUDINARY_NAME: ${{ secrets.API_URL }}
+          VITE_CLOUDINARY_PRESET: ${{ secrets.API_URL }}
         run: npm run build
 
       - name: Deploy to Firebase
