@@ -199,7 +199,7 @@ const UploadProduct = () => {
         theme: "light",
       });
 
-      setInterval(() => {
+      setTimeout(() => {
         navigate("/");
       }, 3000);
     } catch (error) {
