@@ -1,0 +1,30 @@
+name: Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.15.0  # เลือกเวอร์ชัน Node.js ที่คุณต้องการใช้
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the React app
+        run: npm run build
+
+      - name: Deploy to Firebase
+        run: |
+          npm install -g firebase-tools
+          firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
