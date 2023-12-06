@@ -38,6 +38,7 @@ const Produstlist = () => {
       setProductList(filteredProduct);
     }
   }, [searchTerm, product]);
+  
 
   return (
     <LayoutComponent>
@@ -78,7 +79,7 @@ const Produstlist = () => {
           )}
         </div>
         <Link to='/upload'>
-          <IoIosAddCircleOutline size={"50px"} cursor={"pointer"} />
+          <IoIosAddCircleOutline size={"50px"}/>
         </Link>
       </div>
     </LayoutComponent>

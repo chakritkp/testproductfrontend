@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ToastContainer, toast } from "react-toastify" 
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 const cloudinaryName = import.meta.env.VITE_CLOUDINARY_NAME;
@@ -61,13 +61,89 @@ const UploadProduct = () => {
     setImagePreview(updetedImagePreview);
   };
 
+  console.log("formData : " + formData.img);
+  console.log("fileName : " + fileName);
+  console.log("imagePreview : " + imagePreview);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: name === "price" ? Number(value) : value,
-    }));
+    if (name === "img") {
+      const files = e.target.files;
+
+      if (files) {
+        const validFileTypes = ["image/jpeg", "image/png"];
+
+        const validFiles = Array.from(files).filter((file) =>
+          validFileTypes.includes(file.type)
+        );
+
+        if (validFiles.length !== files.length) {
+          toast.error("Invalid file type. Please choose JPG or PNG file", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          return;
+        }
+
+        const maxSize = 50 * 1024 * 1024;
+        const newFiles = validFiles.filter((file) => file.size <= maxSize);
+
+        if (newFiles.length === 0) {
+          toast.error("File size exceeds 50MB", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          return;
+        }
+
+        if (formData.img.length === 6) {
+          toast.error("You can upload a maximum of 6 files", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          return;
+        }
+
+        setFormData((prevData) => ({
+          ...prevData,
+          img: [newFiles[0], ...prevData.img],
+        }));
+
+        setFileName((prevFile) => [
+          ...prevFile,
+          ...newFiles.map((file) => file.name),
+        ]);
+
+        setImagePreview((prevImage) => [
+          ...prevImage,
+          ...newFiles.map((file) => URL.createObjectURL(file)),
+        ]);
+      }
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: name === "price" ? Number(value) : value,
+      }));
+    }
   };
 
   const handleInputSumit = async (e) => {
@@ -126,7 +202,10 @@ const UploadProduct = () => {
         progress: undefined,
         theme: "light",
       });
-      navigate("/");
+
+      setInterval(() => {
+        navigate("/");
+      }, 3000);
     } catch (error) {
       console.error("Error uploading files:", error);
     }
@@ -164,49 +243,7 @@ const UploadProduct = () => {
                 accept="image/*"
                 id="inputImg-field"
                 hidden
-                onChange={({ target: { files } }) => {
-                  if (files) {
-                    const validFileTypes = ["image/jpeg", "image/png"];
-
-                    const validFiles = Array.from(files).filter((file) =>
-                      validFileTypes.includes(file.type)
-                    );
-
-                    const maxSize = 50 * 1024 * 1024;
-                    const newFiles = validFiles.filter(
-                      (file) => file.size <= maxSize
-                    );
-
-                    if (newFiles.length === 0) {
-                      toast.error("File size exceeds 50MB", {
-                        position: "top-center",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                      });
-                      return;
-                    }
-
-                    setFormData((prevData) => ({
-                      ...prevData,
-                      img: [newFiles[0], ...prevData.img],
-                    }));
-
-                    setFileName((prevFile) => [
-                      ...prevFile,
-                      ...newFiles.map((file) => file.name),
-                    ]);
-
-                    setImagePreview((prevImage) => [
-                      ...prevImage,
-                      ...newFiles.map((file) => URL.createObjectURL(file)),
-                    ]);
-                  }
-                }}
+                onChange={handleInputChange}
               />
 
               {imagePreview.length > 0 ? (
@@ -274,7 +311,6 @@ const UploadProduct = () => {
                 name="name"
                 placeholder="Product name"
                 onChange={handleInputChange}
-  
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -285,7 +321,6 @@ const UploadProduct = () => {
                 name="code"
                 placeholder="Code"
                 onChange={handleInputChange}
-
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -296,7 +331,6 @@ const UploadProduct = () => {
                 name="price"
                 placeholder="฿1,000"
                 onChange={handleInputChange}
-   
               />
             </div>
           </div>
@@ -321,19 +355,18 @@ const UploadProduct = () => {
           </ButtonComponent>
         </div>
         <ToastContainer
-        position="top-center"
-        autoClose={1000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+          position="top-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </form>
-
     </LayoutComponent>
   );
 };
