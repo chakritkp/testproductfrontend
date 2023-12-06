@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify" 
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 const cloudinaryName = import.meta.env.VITE_CLOUDINARY_NAME;
@@ -78,7 +78,7 @@ const UploadProduct = () => {
       formData.code === "" ||
       formData.price === 0
     ) {
-      toast.error('All fields are required', {
+      toast.error("All fields are required", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -134,7 +134,7 @@ const UploadProduct = () => {
 
   return (
     <LayoutComponent>
-      <Link to='/'>
+      <Link to="/">
         <div className="w-full flex justify-start items-center">
           <MdNavigateBefore size={"48px"} />
           <FontComponent fontType={"title"} fontSize={"24px"}>
@@ -164,10 +164,32 @@ const UploadProduct = () => {
                 accept="image/*"
                 id="inputImg-field"
                 hidden
-                required
                 onChange={({ target: { files } }) => {
                   if (files) {
-                    const newFiles = Array.from(files);
+                    const validFileTypes = ["image/jpeg", "image/png"];
+
+                    const validFiles = Array.from(files).filter((file) =>
+                      validFileTypes.includes(file.type)
+                    );
+
+                    const maxSize = 50 * 1024 * 1024;
+                    const newFiles = validFiles.filter(
+                      (file) => file.size <= maxSize
+                    );
+
+                    if (newFiles.length === 0) {
+                      toast.error("File size exceeds 50MB", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                      });
+                      return;
+                    }
 
                     setFormData((prevData) => ({
                       ...prevData,
@@ -252,7 +274,7 @@ const UploadProduct = () => {
                 name="name"
                 placeholder="Product name"
                 onChange={handleInputChange}
-                required
+  
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -263,7 +285,7 @@ const UploadProduct = () => {
                 name="code"
                 placeholder="Code"
                 onChange={handleInputChange}
-                required
+
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -274,7 +296,7 @@ const UploadProduct = () => {
                 name="price"
                 placeholder="฿1,000"
                 onChange={handleInputChange}
-                required
+   
               />
             </div>
           </div>
@@ -298,8 +320,7 @@ const UploadProduct = () => {
             ยืนยัน
           </ButtonComponent>
         </div>
-      </form>
-      <ToastContainer
+        <ToastContainer
         position="top-center"
         autoClose={1000}
         hideProgressBar={false}
@@ -311,6 +332,8 @@ const UploadProduct = () => {
         pauseOnHover
         theme="light"
       />
+      </form>
+
     </LayoutComponent>
   );
 };
