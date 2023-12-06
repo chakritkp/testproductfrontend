@@ -92,16 +92,6 @@ const UploadProduct = () => {
         const newFiles = validFiles.filter((file) => file.size <= maxSize);
 
         if (newFiles.length === 0) {
-          toast.error("File size exceeds 50MB", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
           return;
         }
 
