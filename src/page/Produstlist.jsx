@@ -60,7 +60,7 @@ const Produstlist = () => {
         </div>
         <div className="flex flex-wrap gap-6 w-[1100px]">
           {productList.length > 0 ? (
-            productList.map((product) => (
+            productList?.map((product) => (
               <ProductCard
                 key={product._id}
                 id={product._id}
