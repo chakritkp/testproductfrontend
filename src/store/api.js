@@ -6,5 +6,5 @@ const api = axios.create({
     baseURL: BASE_URL,
 });
 
-export const getProductList = () => api.get('/public/productlist.products.json')
+export const getProductList = () => api.get('/productlist')
 export const createProduct = (productData) => api.post('/createproduct', productData);
